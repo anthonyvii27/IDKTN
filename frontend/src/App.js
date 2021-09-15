@@ -10,7 +10,7 @@ import RFIDReader from './layout/rfidReader';
 const App = () => (
     <MainScreen>
         <Device>
-            <DeviceScreen>
+            <DeviceScreen bgColor="#00A3FF">
                 <Bar />
 
                 <MessageSection message="Aproxime o cartão" />

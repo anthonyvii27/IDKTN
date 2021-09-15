@@ -4,7 +4,7 @@ export const BarSection = styled.section`
     width: 318px;
     height: 30px;
     padding: 0 16px;
-    background: #0099EF;
+    background: rgba(0,0,0,.1);
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 

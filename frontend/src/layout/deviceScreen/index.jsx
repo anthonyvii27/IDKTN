@@ -2,7 +2,7 @@ import React from 'react';
 import { Screen } from './styles';
 
 const DeviceScreen = props => (
-    <Screen bgColor="#00A3FF">
+    <Screen bgColor={props.bgColor}>
         {props.children}
     </Screen>
 );

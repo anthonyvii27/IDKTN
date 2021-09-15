@@ -11,7 +11,7 @@ export const WaveContainer = styled.section`
 export const WaveCreatorsContainer = styled.div`
     width: 100%;
     height: 25px;
-    background: #0099EF;
+    background: rgba(0,0,0,.1);
     display: flex;
     justify-content: flex-end;
 
