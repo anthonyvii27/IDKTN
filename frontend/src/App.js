@@ -5,6 +5,7 @@ import DeviceScreen from './layout/deviceScreen';
 import Bar from './layout/bar';
 import MessageSection from './layout/message';
 import Wave from './layout/wave';
+import RFIDReader from './layout/rfidReader';
 
 const App = () => (
     <MainScreen>
@@ -16,6 +17,8 @@ const App = () => (
 
                 <Wave />
             </DeviceScreen>
+
+            <RFIDReader />
         </Device>
     </MainScreen>
 );
