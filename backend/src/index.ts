@@ -22,7 +22,7 @@ const handler = async (topic: string, message: Buffer) => {
         const newBalance = balance - 4.05;
         await mongoCollection.update({ id }, { $set: { balance: newBalance } });
         
-        io.emit('success', balance);
+        io.emit('success', newBalance);
     }
 }
 
