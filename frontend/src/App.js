@@ -9,31 +9,43 @@ import Wave from './layout/wave';
 import RFIDReader from './layout/rfidReader';
 import { socket } from './services/client';
 
+const initialState = {
+    type: "wait",
+    message: "Aproxime o cartão",
+    balance: null
+};
+
 const App = () => {
-    const [event, setEvent] = useState({
-        message: "Aproxime o cartão",
-        balance: 0
-    });
+    const [event, setEvent] = useState({ ...initialState });
 
     useEffect(() => {
         socket.on("success", data => {
-            setEvent({ message: "Passe", balance: data });
+            setEvent({ 
+                type: "pass",
+                message: "Passe", 
+                balance: data 
+            });
+
+            setTimeout(() => {
+                setEvent({ ...initialState })
+            }, 3000)
         });
+
+        
     }, [socket]);
 
     return (
-    <MainScreen>
-        <Device>
-            {/* #0DB628 */}
-            <DeviceScreen bgColor="#00A3FF">
-                <Bar />
-                <MessageSection message={event.message} balance={event.balance} />
-                <Wave />
-            </DeviceScreen>
-            <RFIDReader />
-        </Device>
-    </MainScreen>
-);
-    }
+        <MainScreen>
+            <Device>
+                <DeviceScreen bgColor={event?.type === "wait" ? "#00A3FF" : "#0DB628"}>
+                    <Bar />
+                    <MessageSection message={event.message} balance={event.balance?.toFixed(2)} />
+                    <Wave />
+                </DeviceScreen>
+                <RFIDReader />
+            </Device>
+        </MainScreen>
+    );
+}
 
 export default App;
