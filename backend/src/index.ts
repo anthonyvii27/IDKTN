@@ -5,22 +5,28 @@ import * as monk from 'monk';
 import { createServer } from 'http';
 
 interface Account {
-    id: string;
+    card_id: string;
     balance: number;
 }
 
 const handler = async (topic: string, message: Buffer) => {
-    const id = message.toString();
-    
-    console.log(`Received message at topic ${topic}: ${id}`);
-    
-    const { balance }: Account = await mongoCollection.findOne({ id });
+    const card_id = message.toString().trim();
+
+    console.log(`Received message at topic ${topic}: ${card_id}`);
+
+    console.log(mongoCollection);
+  
+    const { balance }: Account = await mongoCollection.findOne({ _id: "616b012cd1423d06480b4a42"});
+
+    console.log(balance)
+
     
     if(balance < 4.05) {
         io.emit('error');
     } else {
         const newBalance = balance - 4.05;
-        await mongoCollection.update({ id }, { $set: { balance: newBalance } });
+        await mongoCollection.update({ card_id }, { $set: { balance: newBalance } });
+
         
         io.emit('success', newBalance);
     }
