@@ -16,9 +16,8 @@ const App = () => {
     });
 
     useEffect(() => {
-        socket.on("message", data => {
-            console.log(data);
-            // setEvent([data]);
+        socket.on("success", data => {
+            setEvent({ message: "Passe", balance: data });
         });
     }, [socket]);
 
