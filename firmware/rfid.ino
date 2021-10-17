@@ -4,27 +4,31 @@
 #include <ArduinoOTA.h>
 #include <SPI.h>
 #include <MFRC522.h>
+#include <WiFiManager.h>
+#include <DNSServer.h>
+#include <ESP8266WebServer.h>
 
 
-#define TOPIC_MQTT "TOPIC"                                  
-#define ID_MQTT  "ID"
+#define TOPIC_MQTT "VALUE"                                  
+#define ID_MQTT  "VALUE"
 
-#define USER_MQTT  "login"
-#define PASS_MQTT  "senha" 
+#define USER_MQTT  "VALUE"
+#define PASS_MQTT  "VALUE" 
                             
 #define RST_PIN    D3    
 #define SS_PIN     D8   
 #define LED        D1
 
 
-// WIFI
-const char* SSID = "SSID";
-const char* PASSWORD = "PASSWORD";
-
 // MQTT
-const char* BROKER_MQTT = "BROKER";
+const char* BROKER_MQTT = "VALUE";
 int BROKER_PORT = 1883;
- 
+
+// WIFI
+const char* WIFI_HOST = "VALUE";
+const char* WIFI_SSID = "VALUE";
+const char* WIFI_PASSWORD = "VALUE";
+
  
 WiFiClient espClient;
 PubSubClient MQTT(espClient);
@@ -59,13 +63,21 @@ void initSerial() {
  
 
 void initWiFi() {
-    delay(10);
     Serial.println("------ WI-FI ------");
-    Serial.print("Conectando-se na rede: ");
-    Serial.println(SSID);
-    Serial.println("Aguarde...");
+    WiFi.hostname(WIFI_HOST);
+    WiFiManager wifiManager;
+     
+    //wifiManager.resetSettings(); //Usado para resetar sssid e senhas armazenadas
     
-    reconectWiFi();
+    wifiManager.autoConnect(WIFI_SSID, WIFI_PASSWORD);
+    Serial.print("Conectado com sucesso na rede via WifiManager na rede: ");
+    Serial.println(WiFi.SSID());
+    Serial.println();
+    Serial.print("IP obtido: ");
+    Serial.print(WiFi.localIP());
+    Serial.println();
+    Serial.print("Endereço MAC: ");
+    Serial.print(WiFi.macAddress());
 }
 
 
@@ -73,8 +85,8 @@ void initOTA() {
     Serial.println();
     Serial.println("------ OTA ------");
     
-    ArduinoOTA.setHostname("rfid-system");
-    ArduinoOTA.setPassword((const char *)"PASSWORD");
+    ArduinoOTA.setHostname("VALUE");
+    ArduinoOTA.setPassword((const char *)"VALUE");
     
     ArduinoOTA.onStart([]() {
         Serial.println("Start");
@@ -138,8 +150,9 @@ void reconnectMQTT() {
 void reconectWiFi() {
     if (WiFi.status() == WL_CONNECTED)
         return;
-        
-    WiFi.begin(SSID, PASSWORD);
+
+    WiFi.hostname(WIFI_HOST);
+    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
     
     while (WiFi.status() != WL_CONNECTED) {
         delay(100);
@@ -148,7 +161,7 @@ void reconectWiFi() {
   
     Serial.println();
     Serial.print("Conectado com sucesso na rede: ");
-    Serial.print(SSID);
+    Serial.print(WIFI_SSID);
     Serial.println();
     Serial.print("IP obtido: ");
     Serial.print(WiFi.localIP());  
@@ -189,7 +202,7 @@ void loop() {
         return;
     }
 
-    if ( ! mfrc522.PICC_ReadCardSerial()) {
+    if (!mfrc522.PICC_ReadCardSerial()) {
         return;
     }
 
